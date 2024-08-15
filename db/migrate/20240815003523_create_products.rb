@@ -6,7 +6,7 @@ class CreateProducts < ActiveRecord::Migration[7.2]
       t.string :cfop
       t.string :unity_commercialized
       t.integer :quantity_commercialized
-      t.string :unity_value
+      t.decimal :unity_value, precision: 10, scale: 2
       t.references :invoice
       t.timestamps
     end
