@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   post '/report/:id/export_csv', to: 'reports#export_csv', as: 'reports_export_csv'
   patch '/report/:id', to: 'reports#update', as: 'reports_update'
   delete '/report/:id', to: 'reports#destroy', as: 'reports_destroy'
+
+  mount Sidekiq::Web, at: '/sidekiq'
 end
