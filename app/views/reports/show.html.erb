@@ -1,0 +1,16 @@
+<h1><%= @report.title %></h1>
+<div class="box">
+  <div>
+    <%= @invoices.each.with_index do |invoice, index| %>
+      <a href=""><%= index + 1 %></a>
+    <% end %>
+  </div>
+  <div class="companies">
+    <div class="issuer-data"></div>
+    <div class="recipient-data"></div>
+  </div>
+  <div class="products">
+    <div class="product-data"></div>
+  </div>
+  <div class="taxes"></div>
+</div>

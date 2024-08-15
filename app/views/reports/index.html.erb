@@ -1,0 +1,21 @@
+<h1>Relatórios</h1>
+
+<div class="box flex w-full">
+  <button>Novo relatório</button>
+  <% @reports.each do |report| %>
+    <div class="flex w-full">
+      <% if report.status == "processing" %>
+        <div class="loader"></div>
+      <% elsif report.status == "avaiable" %>
+        <%= render inline: Rails.root.join('app/assets/icons/check_circle.svg').read %>
+      <% else %>
+        <%= render inline: Rails.root.join('app/assets/icons/cancel.svg').read %>
+      <% end %>
+      <a href="<%= reports_show_path(report.id) %>"><%= report.title %></a>
+      <span><%= report.created_at.strftime("%d-%m-%Y") %></span>
+      <a href=""><%= render inline: Rails.root.join('app/assets/icons/edit.svg').read %></a>
+      <a href=""><%= render inline: Rails.root.join('app/assets/icons/download.svg').read %></a>
+      <a href=""><%= render inline: Rails.root.join('app/assets/icons/delete.svg').read %></a>
+    </div>
+  <% end %>
+</div>
