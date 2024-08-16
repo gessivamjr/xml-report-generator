@@ -1,5 +1,5 @@
-<form method="post" action="<%= reports_create_path %>">
+<form method="post" action="<%= reports_create_path %>" enctype="multipart/form-data">
   <input type="text" name="title">
-  <input type="file" accept=".xml,.zip">
+  <input type="file" accept=".xml,text/xml,application/xml,.zip,application/zip" name="report_files">
   <button>Gerar relatório</button>
 </form>
