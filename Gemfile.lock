@@ -240,6 +240,7 @@ GEM
       rubocop-performance
       rubocop-rails
     ruby-progressbar (1.13.0)
+    rubyzip (2.3.2)
     securerandom (0.3.1)
     sidekiq (7.3.1)
       concurrent-ruby (< 2)
@@ -312,6 +313,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rails (~> 7.2.0)
   rubocop-rails-omakase
+  rubyzip (~> 2.3)
   sidekiq (~> 7.3)
   sprockets-rails
   stimulus-rails

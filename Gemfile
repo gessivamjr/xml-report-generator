@@ -56,3 +56,5 @@ end
 gem "devise", "~> 4.9"
 
 gem "sidekiq", "~> 7.3"
+
+gem "rubyzip", "~> 2.3"
