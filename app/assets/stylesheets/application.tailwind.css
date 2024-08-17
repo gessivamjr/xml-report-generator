@@ -16,10 +16,29 @@
   100% { transform: rotate(360deg); } /* Rotation keyframe remains unchanged */
 }
 
-svg {
-  fill: #000
+.tooltip-container {
+  position: relative;
+  display: inline-block;
 }
 
-svg:hover {
-  fill: rgba(0, 0, 0, 0.85)
+.tooltip-text {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position the tooltip above the text */
+  left: 50%;
+  margin-left: -60px; /* Use half of the width to center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
 }
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+

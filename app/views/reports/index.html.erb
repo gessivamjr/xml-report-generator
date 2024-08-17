@@ -36,9 +36,18 @@
             <span class=""><%= report.created_at.strftime("%d/%m/%Y") %></span>
           </div>
           <div class="w-1/5 flex justify-evenly px-6">
-            <a href=""><%= inline_svg_tag 'edit.svg', class: 'fill-gray-800 hover:fill-gray-700' %></a>
-            <a href="<%= reports_export_csv_path(report.id) %>"><%= inline_svg_tag 'download.svg', class: 'fill-blue-800 hover:fill-blue-700' %></a>
-            <a href=""><%= inline_svg_tag 'delete.svg', class: 'fill-red-600 hover:fill-red-500' %></a>
+            <div class="tooltip-container">
+              <a href=""><%= inline_svg_tag 'edit.svg', class: 'fill-gray-800 hover:fill-gray-700' %></a>
+              <span class="tooltip-text">Editar</span>
+            </div>
+            <div class="tooltip-container">
+              <a href="<%= reports_export_csv_path(report.id) %>"><%= inline_svg_tag 'download.svg', class: 'fill-blue-800 hover:fill-blue-700' %></a>
+              <span class="tooltip-text">Exportar .csv</span>
+            </div>
+            <div class="tooltip-container">
+              <a href=""><%= inline_svg_tag 'delete.svg', class: 'fill-red-600 hover:fill-red-500' %></a>
+              <span class="tooltip-text">Excluir</span>
+            </div>
           </div>
         </li>
       <% end %>
