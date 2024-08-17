@@ -24,31 +24,24 @@ class ProcessReportFilesJob < ApplicationJob
     report.status_avaiable! if !report.status_failed?
   end
 
-  def process_xml(report, hash)
-    invoice_info = hash.dig('NFe', 'infNFe')
+  def process_xml(report, xml_content)
+    invoice_info = xml_content.dig('NFe', 'infNFe')
+
     if invoice_info.nil?
       report.status = 'failed'
-      report.failure_reason = 'Informação da Nota Fiscal está indisponível'
-      return report.save
+      report.failure_reason = "Informações indisponíveis para processamento."
+      report.save
+      return ScheduleFailedReportDeletionJob.set(wait: 10.minutes).perform_later(report)
     end
 
     invoice =
-      ProcessReportFilesHelper.create_invoice(report.id, invoice_info['ide'],
+      ProcessReportFilesHelper.create_invoice(report, invoice_info['ide'],
                                               invoice_info.dig('total', 'ICMSTot'))
+    return if invoice[:errors].present?
 
-    if invoice[:errors].present?
-      invoice_number = invoice_info.dig('ide', 'nNF')
-      failure_reason = "Processamento da nota fiscal #{invoice_number || ''} " \
-                       "apresentou um erro inesperado. #{invoice[:errors]}"
-      failure_reason.strip.squeeze!(' ')
-      report.status = 'failed'
-      report.failure_reason = failure_reason
-      return report.save
-    end
-
-    ProcessReportFilesHelper.create_issuer(invoice.id, invoice_info['emit'])
-    ProcessReportFilesHelper.create_recipient(invoice.id, invoice_info['dest'])
-    ProcessReportFilesHelper.create_products(invoice.id, invoice_info['det'])
+    ProcessReportFilesHelper.create_issuer(report, invoice.id, invoice_info['emit'])
+    ProcessReportFilesHelper.create_recipient(report, invoice.id, invoice_info['dest'])
+    ProcessReportFilesHelper.create_products(report, invoice.id, invoice_info['det'])
   end
 end
 

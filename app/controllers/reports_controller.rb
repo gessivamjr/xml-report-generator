@@ -35,8 +35,10 @@ class ReportsController < ApplicationController
       return redirect_to action: 'new'
     end
 
-    ProcessReportFilesJob.perform_now(report, tmp_file_path.to_s, zip_file: filename.ends_with?('.zip'))
-    flash[:notice] = 'Relatório criado com sucesso. Aguarde o processamento ser finalizado para acessá-lo.'
+    ProcessReportFilesJob.perform_later(report, tmp_file_path.to_s,
+                                        zip_file: filename.ends_with?('.zip'))
+    flash[:notice] = "Relatório criado com sucesso. " \
+                     "Aguarde o processamento ser finalizado para acessá-lo."
     redirect_to action: 'index'
   end
 

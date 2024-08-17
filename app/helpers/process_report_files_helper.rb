@@ -1,17 +1,26 @@
 module ProcessReportFilesHelper
-  def self.create_invoice(report_id, invoice_data, taxes_data)
+  def self.create_invoice(report, invoice_data, taxes_data)
     invoice =
       Invoice.new(serie: invoice_data['serie'].to_i, number: invoice_data['nNF'].to_i,
                   emitted_at: invoice_data['dhEmi'].to_datetime,
-                  total_values: taxes_data, report_id: report_id)
-    if !invoice.save
+                  total_values: taxes_data, report_id: report.id)
+
+    unless invoice.save
+      invoice_number = invoice_data['nNF']
+      failure_reason = "Processamento da nota fiscal #{invoice_number || ''} " \
+                       'apresentou um erro.'
+      failure_reason.strip.squeeze!(' ')
+      report.status = 'failed'
+      report.failure_reason = failure_reason
+      report.save
+      ScheduleFailedReportDeletionJob.set(wait: 10.minutes).perform_later(report)
       return { errors: invoice.errors.full_messages.join(', ') }
     end
 
     invoice
   end
 
-  def self.create_issuer(invoice_id, data)
+  def self.create_issuer(report, invoice_id, data)
     location = data['enderEmit']
 
     issuer =
@@ -23,10 +32,19 @@ module ProcessReportFilesHelper
                  postal_code: location['CEP'], country_code: location['cPais'],
                  country: location['xPais'], phone_number: location['fone'],
                  invoice_id: invoice_id)
-    issuer.save!
+    
+    unless issuer.save
+      report.status = 'failed'
+      report.failure_reason = 'Dados do emissor apresentaram um erro. ' \
+                              "#{issuer.errors.full_messages.join(', ')}"
+      report.save
+      return ScheduleFailedReportDeletionJob.set(wait: 10.minutes).perform_later(report)
+    end
+     
+    issuer
   end
 
-  def self.create_recipient(invoice_id, data)
+  def self.create_recipient(report, invoice_id, data)
     location = data['enderDest']
 
     recipient =
@@ -36,11 +54,20 @@ module ProcessReportFilesHelper
                     city: location['xMun'], state: location['UF'], postal_code: location['CEP'],
                     country_code: location['cPais'], country: location['xPais'],
                     invoice_id: invoice_id)
-    recipient.save!
+
+    unless recipient.save
+      report.status = 'failed'
+      report.failure_reason = 'Dados do destinatário apresentaram um erro. ' \
+                              "#{recipient.errors.full_messages.join(', ')}"
+      report.save
+      return ScheduleFailedReportDeletionJob.set(wait: 10.minutes).perform_later(report)
+    end
+
+    recipient
   end
 
-  def self.create_products(invoice_id, data)
-    data.each do |item|
+  def self.create_products(report, invoice_id, data)
+    data.each.with_index do |item, index|
       product = item['prod']
       product =
         Product.new(name: product['xProd'], ncm: product['NCM'], cfop: product['CFOP'],
@@ -50,7 +77,14 @@ module ProcessReportFilesHelper
                     value: product['vProd'].to_f.truncate(2), taxed_unity: product['uTrib'],
                     taxed_unity_value: product['vUnTrib'].to_f.truncate(2),
                     quantity_taxed: product['qTrib'].to_i, invoice_id: invoice_id)
-      product.save!
+
+      unless product.save 
+        report.status = 'failed'
+        report.failure_reason = 'Dados relacionados a um produto apresentaram um erro. ' \
+                                "#{product.errors.full_messages.join(', ')}"
+        report.save
+        ScheduleFailedReportDeletionJob.set(wait: 10.minutes).perform_later(report)
+      end
     end
   end
 end
