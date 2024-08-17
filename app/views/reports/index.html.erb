@@ -24,9 +24,9 @@
             <% if report.status == "processing" %>
               <div class="loader"></div>
             <% elsif report.status == "avaiable" %>
-              <%= render inline: Rails.root.join('app/assets/icons/check_circle.svg').read %>
+              <%= inline_svg_tag 'check_circle.svg', class: 'fill-green-800 hover:fill-green-700' %>
             <% else %>
-              <%= render inline: Rails.root.join('app/assets/icons/cancel.svg').read %>
+              <%= inline_svg_tag 'cancel.svg', class: 'fill-red-600 hover:fill-red-500' %>
             <% end %>
           </div>
           <div class="w-2/5 font-semibold">
@@ -35,10 +35,10 @@
           <div class="w-1/5 font-semibold">
             <span class=""><%= report.created_at.strftime("%d/%m/%Y") %></span>
           </div>
-          <div class="w-1/5 flex justify-evenly">
-            <a href=""><%= render inline: Rails.root.join('app/assets/icons/edit.svg').read %></a>
-            <a href="<%= reports_export_csv_path(report.id) %>"><%= render inline: Rails.root.join('app/assets/icons/download.svg').read %></a>
-            <a href=""><%= render inline: Rails.root.join('app/assets/icons/delete.svg').read %></a>
+          <div class="w-1/5 flex justify-evenly px-6">
+            <a href=""><%= inline_svg_tag 'edit.svg', class: 'fill-gray-800 hover:fill-gray-700' %></a>
+            <a href="<%= reports_export_csv_path(report.id) %>"><%= inline_svg_tag 'download.svg', class: 'fill-blue-800 hover:fill-blue-700' %></a>
+            <a href=""><%= inline_svg_tag 'delete.svg', class: 'fill-red-600 hover:fill-red-500' %></a>
           </div>
         </li>
       <% end %>
