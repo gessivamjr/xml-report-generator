@@ -58,3 +58,5 @@ gem "devise", "~> 4.9"
 gem "sidekiq", "~> 7.3"
 
 gem "rubyzip", "~> 2.3"
+
+gem "csv", "~> 3.3"
