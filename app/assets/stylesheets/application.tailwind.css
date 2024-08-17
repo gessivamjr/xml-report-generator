@@ -2,26 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
-
-@layer components {
-  .btn-primary {
-    @apply py-2 px-4 bg-blue-200;
-  }
-}
-
-*/
-
 .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
+  border: 6px solid #f3f3f3; /* Adjusted border width */
+  border-top: 6px solid rgb(30, 64, 175); /* Adjusted top border width */
+  border-radius: 50%; /* Keeps the circular shape */
+  width: 24px; /* New width */
+  height: 24px; /* New height */
+  animation: spin 2s linear infinite; /* Animation remains unchanged */
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); } /* Rotation keyframe remains unchanged */
+  100% { transform: rotate(360deg); } /* Rotation keyframe remains unchanged */
+}
+
+svg {
+  fill: #000
+}
+
+svg:hover {
+  fill: rgba(0, 0, 0, 0.85)
 }
