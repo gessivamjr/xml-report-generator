@@ -60,3 +60,5 @@ gem "sidekiq", "~> 7.3"
 gem "rubyzip", "~> 2.3"
 
 gem "csv", "~> 3.3"
+
+gem "inline_svg", "~> 1.9"
