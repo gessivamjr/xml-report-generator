@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get '/report/new', to: 'reports#new', as: 'reports_new'
   post '/report', to: 'reports#create', as: 'reports_create'
   get '/report/:id', to: 'reports#show', as: 'reports_show'
-  post '/report/:id/export_csv', to: 'reports#export_csv', as: 'reports_export_csv'
+  get '/report/:id/export_csv', to: 'reports#export_csv', as: 'reports_export_csv'
   patch '/report/:id', to: 'reports#update', as: 'reports_update'
   delete '/report/:id', to: 'reports#destroy', as: 'reports_destroy'
 

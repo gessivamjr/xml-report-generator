@@ -56,6 +56,16 @@ class ReportsController < ApplicationController
   end
 
   def export_csv
-    report = Report.find(id: params[:id])
+    report = Report.find(params[:id])
+
+    if report.status != 'avaiable'
+      flash[:alert] = 'Relatório indisponível para exportação de .csv'
+      return redirect_to action: 'index'
+    end
+
+    send_data(CsvGenerator::Report.call(report.id),
+              filename: "relatorio-#{report.title}.csv",
+              type: 'text/csv',
+              disposition: 'attachment')
   end
 end
