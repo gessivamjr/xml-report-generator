@@ -1,0 +1,38 @@
+<li class="flex justify-around bg-slate-100 mb-4 p-4 rounded-3xl">
+  <div class="w-1/5 pl-4">
+    <% if report.status == "processing" %>
+      <div class="loader"></div>
+    <% elsif report.status == "avaiable" %>
+      <div class="tooltip-container">
+        <%= inline_svg_tag 'check_circle.svg', class: 'fill-green-800 hover:fill-green-700' %>
+        <span class="tooltip-text">Disponível</span>
+      </div>
+    <% else %>
+      <div class="tooltip-container">
+        <%= inline_svg_tag 'cancel.svg', class: 'fill-red-600 hover:fill-red-500' %>
+        <span class="tooltip-text">Falhou</span>
+      </div>
+    <% end %>
+  </div>
+  <div class="w-2/5 font-semibold">
+    <% if report.status_avaiable? %>
+      <%= link_to report.title, reports_show_path(report.id) %>
+    <% else %>
+      <%= report.title %>
+    <% end %>
+  </div>
+  <div class="w-1/5 font-semibold">
+    <span><%= report.created_at.strftime("%d/%m/%Y") %></span>
+  </div>
+  <div class="w-1/5 flex justify-evenly px-6">
+    <div class="tooltip-container">
+      <%= link_to inline_svg_tag('download.svg', class: 'fill-blue-800 hover:fill-blue-700'), reports_export_csv_path(report.id) %>
+      <span class="tooltip-text">Exportar .csv</span>
+    </div>
+    <div class="tooltip-container">
+      <%= button_to inline_svg_tag('delete.svg', class: 'fill-red-600 hover:fill-red-500'), reports_destroy_path(report.id), method: :delete %>
+      <span class="tooltip-text">Excluir</span>
+    </div>
+  </div>
+</li>
+
