@@ -37,7 +37,7 @@ class ProcessReportFilesJob < ApplicationJob
     invoice =
       ProcessReportFilesHelper.create_invoice(report, invoice_info['ide'],
                                               invoice_info.dig('total', 'ICMSTot'))
-    return if invoice[:errors].present?
+    return invoice[:errors] if invoice[:errors].present?
 
     ProcessReportFilesHelper.create_issuer(report, invoice.id, invoice_info['emit'])
     ProcessReportFilesHelper.create_recipient(report, invoice.id, invoice_info['dest'])
