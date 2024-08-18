@@ -1,10 +1,12 @@
-<div class="flex justify-center w-full py-6">
+<div id="flash-messages">
   <% if notice %>
-    <p class="notice"><%= notice %></p>
+    <p class="notice p-2 bg-green-200 border-l-green-800 border border-l-8 border-solid font-semibold">Relatório deve conter no mínimo um arquivo .xml <span class="bg-gray-200 hover:bg-gray-300 rounded-3xl px-1 hover:cursor-pointer ml-3" onclick="document.getElementById('flash-messages').style = 'display:none;'">x</span></p>
   <% end %>
   <% if alert %>
-    <p class="alert"><%= alert %></p>
+    <p class="notice p-2 bg-red-200 border-l-red-800 border border-l-8 border-solid font-semibold">Relatório deve conter no mínimo um arquivo .xml <span class="bg-gray-200 hover:bg-gray-300 rounded-3xl px-1 hover:cursor-pointer ml-3" onclick="document.getElementById('flash-messages').style = 'display:none;'">x</span></p>
   <% end %>
+</div>
+<div class="flex justify-center w-full py-6">
   <h1 class="text-4xl font-bold">Relatórios</h1>
 </div>
 <div class="h-full w-full flex justify-center px-40">
