@@ -1,12 +1,19 @@
 <div class="flex justify-center w-full py-6">
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <% if notice %>
+    <p class="notice"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+    <p class="alert"><%= alert %></p>
+  <% end %>
   <h1 class="text-4xl font-bold">Relatórios</h1>
 </div>
-
-<div class="h-screen w-full flex justify-center px-40 rounded-t-3xl">
-  <div class="flex flex-col w-full py-8 px-14 rounded-3xl bg-stone-500">
-    <button onClick="<%= reports_new_path %>" class="self-end p-3 mb-2 w-40 bg-blue-800 rounded-3xl hover:bg-blue-900 text-slate-200 font-semibold">Novo relatório</button>
+<div class="h-full w-full flex justify-center px-40">
+  <div class="flex flex-col w-full py-8 px-14 rounded-3xl bg-neutral-800 mb-10">
+    <div class="w-full mb-2">
+      <%= turbo_frame_tag 'new_report' do %>
+        <%= button_to "Novo relatório", reports_new_path, method: :get, class: "p-3 w-40 rounded-3xl bg-blue-700 hover:bg-blue-800 text-slate-200 font-semibold" %>
+      <% end %>
+    </div>
     <ul>
       <li class="p-4 flex justify-around">
         <div class="w-1/5 flex">
@@ -24,28 +31,34 @@
             <% if report.status == "processing" %>
               <div class="loader"></div>
             <% elsif report.status == "avaiable" %>
-              <%= inline_svg_tag 'check_circle.svg', class: 'fill-green-800 hover:fill-green-700' %>
+              <div class="tooltip-container">
+                <%= inline_svg_tag 'check_circle.svg', class: 'fill-green-800 hover:fill-green-700' %>
+                <span class="tooltip-text">Disponível</span>
+              </div>
             <% else %>
-              <%= inline_svg_tag 'cancel.svg', class: 'fill-red-600 hover:fill-red-500' %>
+              <div class="tooltip-container">
+                <%= inline_svg_tag 'cancel.svg', class: 'fill-red-600 hover:fill-red-500' %>
+                <span class="tooltip-text">Falhou</span>
+              </div>
             <% end %>
           </div>
           <div class="w-2/5 font-semibold">
-            <span class=""><a href="<%= reports_show_path(report.id) %>"><%= report.title %></a></span>
+            <% if report.status_avaiable? %>
+              <%= link_to report.title, reports_show_path(report.id) %>
+            <% else %>
+              <%= report.title %>
+            <% end %>
           </div>
           <div class="w-1/5 font-semibold">
-            <span class=""><%= report.created_at.strftime("%d/%m/%Y") %></span>
+            <span><%= report.created_at.strftime("%d/%m/%Y") %></span>
           </div>
           <div class="w-1/5 flex justify-evenly px-6">
             <div class="tooltip-container">
-              <a href=""><%= inline_svg_tag 'edit.svg', class: 'fill-gray-800 hover:fill-gray-700' %></a>
-              <span class="tooltip-text">Editar</span>
-            </div>
-            <div class="tooltip-container">
-              <a href="<%= reports_export_csv_path(report.id) %>"><%= inline_svg_tag 'download.svg', class: 'fill-blue-800 hover:fill-blue-700' %></a>
+              <%= link_to inline_svg_tag('download.svg', class: 'fill-blue-800 hover:fill-blue-700'), reports_export_csv_path(report.id) %>
               <span class="tooltip-text">Exportar .csv</span>
             </div>
             <div class="tooltip-container">
-              <a href=""><%= inline_svg_tag 'delete.svg', class: 'fill-red-600 hover:fill-red-500' %></a>
+              <%= button_to inline_svg_tag('delete.svg', class: 'fill-red-600 hover:fill-red-500'), reports_destroy_path(report.id), method: :delete %>
               <span class="tooltip-text">Excluir</span>
             </div>
           </div>

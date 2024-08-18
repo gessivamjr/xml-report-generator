@@ -1,5 +1,10 @@
-<form method="post" action="<%= reports_create_path %>" enctype="multipart/form-data">
-  <input type="text" name="title">
-  <input type="file" accept=".xml,text/xml,application/xml,.zip,application/zip" name="report_files">
-  <button>Gerar relatório</button>
-</form>
+<%= turbo_frame_tag 'new_report' do %>
+  <form class="flex w-full" method="post" action="<%= reports_create_path %>" enctype="multipart/form-data">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="text" name="title" placeholder="Título do relatório..." autofocus required class="w-80 rounded-3xl mr-4">
+    <label for="report_files" class="mr-4 p-3 w-40 rounded-3xl bg-slate-100 hover:bg-slate-200 text-black font-semibold hover:cursor-pointer">Escolher arquivo</label>
+    <input type="file" accept=".xml,text/xml,application/xml,.zip,application/zip" name="report_files" id="report_files" class="hidden">
+    <input type="submit" class="mr-4 p-3 w-40 rounded-3xl bg-blue-700 hover:bg-blue-800 text-slate-200 font-semibold hover:cursor-pointer" value="Gerar relatório">
+    <%= link_to 'Cancelar', reports_index_path, class: "p-3 w-40 rounded-3xl bg-red-700 hover:bg-red-800 text-center text-slate-200 font-semibold" %>
+  </form>
+<% end %>

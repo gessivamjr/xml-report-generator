@@ -1,16 +1,87 @@
-<h1><%= @report.title %></h1>
-<div class="box">
-  <div>
-    <%= @invoices.each.with_index do |invoice, index| %>
-      <a href=""><%= index + 1 %></a>
+<div class="flex justify-center w-full py-6">
+  <h1 class="text-4xl font-bold"><%= @report.title %></h1>
+</div>
+<div class="h-full w-full flex justify-center px-40">
+  <div class="flex flex-col w-full py-8 px-14 rounded-3xl mb-10 bg-neutral-800">
+    <div class="flex flex-col justify-around w-full mb-2">
+      <%= button_to inline_svg_tag('arrow_back.svg', class: 'fill-white'), reports_index_path, method: :get, class: 'mb-5' %>
+      <form class="flex flex-col w-full" action="<%= reports_show_path(@report) %>">
+        <input type="hidden" name="filters" value="true">
+        <div class="flex flex-col w-full mb-2">
+          <label class="text-slate-200" for="invoices">Filtrar por nota:</label>
+          <select name="invoices" id="invoices">
+            <option value="">Selecione uma opção</option>
+            <option value="">Todas</option>
+            <% @invoices.each do |invoice| %>
+              <option value="<%= invoice.number %>"><%= invoice.number %></option>
+            <% end %>
+          </select>
+        </div>
+        <div class="flex flex-col w-full mb-2">
+          <label class="text-slate-200" for="issuers">Filtrar por emitente:</label>
+          <select name="issuers" id="issuers">
+            <option value="">Todos</option>
+            <% @filter_issuers.each do |issuer| %>
+              <option value="<%= issuer %>"><%= issuer %></option>
+            <% end %>
+          </select>
+        </div>
+        <div class="flex flex-col w-full mb-2">
+          <label class="text-slate-200" for="recipients">Filtrar por destinatário:</label>
+          <select name="recipients" id="recipients">
+            <option value="">Todos</option>
+            <% @filter_recipients.each do |recipient| %>
+              <option value="<%= recipient %>"><%= recipient %></option>
+            <% end %>
+          </select>
+        </div>
+        <div class="flex flex-col w-full max-w-full mb-5">
+          <label class="text-slate-200" for="products">Filtrar por produto:</label>
+          <select name="products" id="products">
+            <option value="">Todos</option>
+            <% @filter_products.each do |product| %>
+              <option value="<%= product %>"><%= product %></option>
+            <% end %>
+          </select>
+        </div>
+        <button class="p-3 w-40 rounded-3xl bg-blue-700 hover:bg-blue-800 text-slate-200 font-semibold hover:cursor-pointer">Filtrar</button>
+      </form>
+    </div>
+    <% (@filtered_invoices || @invoices).each do |invoice| %>
+      <div class="mt-10 bg-slate-100 p-5 rounded-3xl">
+        <div class="mb-5">
+          <p class="text-2xl"><strong>Nota Fiscal <%= invoice.number %></strong> | <strong>Número de série:</strong> <%= invoice.serie %> | <strong>Data e Hora da Emissão:</strong> <%= invoice.emitted_at.strftime("%d/%m/%Y %H:%M:%Sh") %></p>
+          <h2 class="mt-5"><strong>Valores Totais:</strong></h2>
+          <div class="flex mb-5">
+            <p>
+              <% invoice.describe_values.each_pair do |key, value| %>
+                <span class="mr-2"><strong><%= key %>:</strong> <%= value %> |</span>
+              <% end %>
+            </p>
+          </div>
+        </div>
+        <div class="w-full flex justify-between mb-5">
+          <div>
+            <h2><strong>Dados do emitente:</strong> <%= invoice.issuer.name %></h2>
+            <p><strong>Nome fantasia:</strong> <%= invoice.issuer.fantasy_name %></p>
+            <p><strong>Endereço:</strong> <%= invoice.issuer.friendly_address %></p>
+            <p><strong>Contato:</strong> <%= invoice.issuer.friendly_phone %></p>
+            <p><strong>Inscrição Estadual:</strong> <%= invoice.issuer.state_subscription %></p>
+            <p><strong>Código do Regime Tributário:</strong> <%= invoice.issuer.tax_regime_code %></p>
+          </div>
+          <div>
+            <h2><strong>Dados do destinatário:</strong> <%= invoice.recipient.name %></h2>
+            <p><strong>Endereço:</strong> <%= invoice.recipient.friendly_address %></p>
+          </div>
+        </div>
+        <div class="w-full">
+          <% invoice.products.each_with_index do |product, index| %>
+            <div class="mb-2">
+              <p><strong>Produto <%= index + 1 %> - <%= product.name %></strong> | <strong>NCM:</strong> <%= product.ncm %> | <strong>CFOP:</strong> <%= product.cfop %> | <strong>Unidade comercializada:</strong> <%= product.unity_commercialized %> | <strong>Quantidade comercializada:</strong> <%= product.quantity_commercialized %> | <strong>Valor unitário:</strong> <%= product.values_to_currency[:unity_value] %> | <strong>Valor total:</strong> <%= product.values_to_currency[:value] %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
-  <div class="companies">
-    <div class="issuer-data"></div>
-    <div class="recipient-data"></div>
-  </div>
-  <div class="products">
-    <div class="product-data"></div>
-  </div>
-  <div class="taxes"></div>
 </div>
