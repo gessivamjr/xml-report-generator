@@ -13,12 +13,13 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "reports#index"
 
-  get '/report/new', to: 'reports#new', as: 'reports_new'
-  post '/report', to: 'reports#create', as: 'reports_create'
-  get '/report/:id', to: 'reports#show', as: 'reports_show'
-  get '/report/:id/export_csv', to: 'reports#export_csv', as: 'reports_export_csv'
-  patch '/report/:id', to: 'reports#update', as: 'reports_update'
-  delete '/report/:id', to: 'reports#destroy', as: 'reports_destroy'
+  get 'reports', to: 'reports#index', as: 'reports_index'
+  get 'report/new', to: 'reports#new', as: 'reports_new'
+  post 'report', to: 'reports#create', as: 'reports_create'
+  get 'report/:id', to: 'reports#show', as: 'reports_show'
+  get 'report/:id/export_csv', to: 'reports#export_csv', as: 'reports_export_csv'
+  patch 'report/:id', to: 'reports#update', as: 'reports_update'
+  delete 'report/:id', to: 'reports#destroy', as: 'reports_destroy'
 
   mount Sidekiq::Web, at: '/sidekiq'
 end
