@@ -30,7 +30,9 @@ class ReportsController < ApplicationController
       end
     end
 
-    tmp_file_path = Rails.root.join('public', 'uploads', filename)
+    tmp_file_path = Rails.root.join('public', 'uploads', "#{filename.parameterize}.xml")
+    sleep 60
+    File.chmod(0755, tmp_file_path)
     File.open(tmp_file_path, 'wb') do |f|
       f.write(file.read)
     end

@@ -20,7 +20,6 @@ class ProcessReportFilesJob < ApplicationJob
       process_xml(report, Hash.from_xml(xml_content))
     end
 
-    File.delete(file_path)
     report.status_avaiable! if !report.status_failed?
   end
 
