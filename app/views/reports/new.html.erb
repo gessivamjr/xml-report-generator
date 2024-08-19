@@ -1,5 +1,6 @@
-<%= turbo_frame_tag 'new_report' do %>
-  <form class="flex w-full" method="post" action="<%= reports_create_path %>" enctype="multipart/form-data">
+<div class="w-full mt-32 flex flex-col justify-center items-center bg-neutral-800 py-8 rounded-3xl ">
+  <h1 class="text-slate-200 text-6xl font-bold mb-10">Novo relatório</h1>
+  <form class="flex justify-center w-full" method="post" action="<%= reports_create_path %>" enctype="multipart/form-data">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
     <input type="text" name="title" placeholder="Título do relatório..." autofocus required class="w-80 rounded-3xl mr-4">
     <label for="report_files" class="mr-4 p-3 w-40 rounded-3xl bg-slate-100 hover:bg-slate-200 text-black font-semibold hover:cursor-pointer">Escolher arquivo</label>
@@ -7,4 +8,4 @@
     <input type="submit" class="mr-4 p-3 w-40 rounded-3xl bg-blue-700 hover:bg-blue-800 text-slate-200 font-semibold hover:cursor-pointer" value="Gerar relatório">
     <%= link_to 'Cancelar', reports_index_path, class: "p-3 w-40 rounded-3xl bg-red-700 hover:bg-red-800 text-center text-slate-200 font-semibold" %>
   </form>
-<% end %>
+</div>

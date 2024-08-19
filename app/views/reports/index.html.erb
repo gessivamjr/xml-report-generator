@@ -1,9 +1,9 @@
 <div id="flash-messages">
-  <% if notice %>
-    <p class="notice p-2 bg-green-200 border-l-green-800 border border-l-8 border-solid font-semibold">Relatório deve conter no mínimo um arquivo .xml <span class="bg-gray-200 hover:bg-gray-300 rounded-3xl px-1 hover:cursor-pointer ml-3" onclick="document.getElementById('flash-messages').style = 'display:none;'">x</span></p>
+  <% if flash[:notice] %>
+    <p class="notice p-2 bg-green-200 border-l-green-800 border border-l-8 border-solid font-semibold"><%= notice %><span class="bg-gray-200 hover:bg-gray-300 rounded-3xl px-1 hover:cursor-pointer ml-3" onclick="document.getElementById('flash-messages').style = 'display:none;'">x</span></p>
   <% end %>
-  <% if alert %>
-    <p class="notice p-2 bg-red-200 border-l-red-800 border border-l-8 border-solid font-semibold">Relatório deve conter no mínimo um arquivo .xml <span class="bg-gray-200 hover:bg-gray-300 rounded-3xl px-1 hover:cursor-pointer ml-3" onclick="document.getElementById('flash-messages').style = 'display:none;'">x</span></p>
+  <% if flash[:alert] %>
+    <p class="notice p-2 bg-red-200 border-l-red-800 border border-l-8 border-solid font-semibold"><%= alert %><span class="bg-gray-200 hover:bg-gray-300 rounded-3xl px-1 hover:cursor-pointer ml-3" onclick="document.getElementById('flash-messages').style = 'display:none;'">x</span></p>
   <% end %>
 </div>
 <div class="flex justify-center w-full py-6">
@@ -12,9 +12,7 @@
 <div class="h-full w-full flex justify-center px-40">
   <div class="flex flex-col w-full py-8 px-14 rounded-3xl bg-neutral-800 mb-10">
     <div class="w-full mb-2">
-      <%= turbo_frame_tag 'new_report' do %>
-        <%= button_to "Novo relatório", reports_new_path, method: :get, class: "p-3 w-40 rounded-3xl bg-blue-700 hover:bg-blue-800 text-slate-200 font-semibold" %>
-      <% end %>
+      <%= button_to "Novo relatório", reports_new_path, method: :get, class: "p-3 w-40 rounded-3xl bg-blue-700 hover:bg-blue-800 text-slate-200 font-semibold" %>
     </div>
     <ul id="reports">
       <li class="p-4 flex justify-around">

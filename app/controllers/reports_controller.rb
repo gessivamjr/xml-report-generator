@@ -15,8 +15,7 @@ class ReportsController < ApplicationController
 
     if file.nil?
       return respond_to do |format|
-        format.turbo_stream { redirect_to action: 'index' }
-        format.html { redirect_to action: 'index', alert: 'Relatório deve conter no mínimo um arquivo .xml' }
+        format.html { redirect_to action: 'index' }
         format.json { render json: { message: 'Relatório deve conter no mínimo um arquivo .xml' }, status: :bad_request }
       end
     end
@@ -26,8 +25,7 @@ class ReportsController < ApplicationController
 
     if file_type != '.xml' && file_type != '.zip'
       return respond_to do |format|
-        format.turbo_stream { redirect_to action: 'index' }
-        format.html { redirect_to action: 'new', alert: 'Arquivo deve ser .xml ou .zip que contenha arquivos .xml' }
+        format.html { redirect_to action: 'index' }
         format.json { render json: { message: 'Arquivo deve ser .xml ou .zip que contenha arquivos .xml' }, status: :bad_request }
       end
     end
@@ -39,8 +37,7 @@ class ReportsController < ApplicationController
 
     if !@report.save
       return respond_to do |format|
-        format.turbo_stream { redirect_to action: 'index' }
-        format.html { redirect_to action: 'new', alert: report.errors.full_messages.join(', ') }
+        format.html { redirect_to action: 'index' }
         format.json { render json: { message: report.errors.full_messages.join(', ') }, status: :unprocessable_entity }
       end
     end
@@ -48,10 +45,7 @@ class ReportsController < ApplicationController
     ProcessReportFilesJob.perform_later(@report, tmp_file_path.to_s,
                                         zip_file: filename.ends_with?('.zip'))
     respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.append('reports', partial: 'report', locals: { report: @report })
-      end
-      format.html { redirect_to action: 'index', notice: 'Relatório criado com sucesso. Aguarde o processamento ser finalizado para acessá-lo.' }
+      format.html { redirect_to action: 'index' }
       format.json { render json: { message: 'Relatório criado com sucesso. Aguarde o processamento ser finalizado para acessá-lo.' }, status: :created }
     end
   end
